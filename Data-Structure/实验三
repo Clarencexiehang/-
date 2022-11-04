@@ -1,0 +1,123 @@
+//实验内容及结果	第一题：
+//代码如下：
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct{
+	int *Data;
+	int Top;
+	int MaxSize;
+}Stack; 
+
+void InitStack(Stack *l,int maxsize){
+	l->MaxSize=maxsize;
+	l->Data=(int *)malloc(l->MaxSize*sizeof(int)); 
+	l->Top=-1;
+}
+
+void Push(Stack *l,int e){
+	if(l->Top==l->MaxSize) 	return;
+	l->Top++;
+	*l->Data=e; l->Data++;
+}
+
+int Pop(Stack *l,int *temp){
+	int a;
+	if(l->Top==-1) return 0;
+    *temp=*(--l->Data); 
+	l->Top--;
+	return *temp;
+}
+
+int main(){
+	Stack *p=(Stack *)malloc(sizeof(Stack)); 
+	int i=0; int maxsize=10;
+	InitStack(p,maxsize);
+	for(i=0;i<maxsize;i++){
+		int e; scanf("%d",&e);
+		Push(p,e);
+	}
+	int *temp=(int *)malloc(sizeof(int));
+	for(i=0;i<maxsize;i++){
+		printf("%d ",Pop(p,temp));
+	}
+	return 0;
+}
+
+
+//第二题：
+//代码如下：
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+struct Stack {
+    char * Data;   // 栈空间
+    int Top;      // 栈顶，为-1时表示空栈
+    int MaxSize; //栈的最大容量
+};
+
+struct Stack *InitStack(int MaxSize){
+	struct Stack *p;
+	p=(struct Stack*)malloc(sizeof(struct Stack));
+	p->MaxSize=MaxSize;
+	p->Data=malloc(sizeof(char)*MaxSize);
+	p->Top=-1;
+	return p;
+}
+
+void Push(struct Stack *S,char t){
+	if(S->Top==S->MaxSize-1){
+		printf("栈满！！！");
+	}
+	else {
+	S->Top++;
+	S->Data[S->Top]=t;
+	} 
+} 
+
+char Pop(struct Stack *S){
+	if(S->Top==-1){
+		printf("栈空！！！"); 
+	}
+	else return S->Data[S->Top--];
+}
+
+int main(){
+	char *p;
+	struct Stack *S;
+	int flag=1; 
+	S=InitStack(10);
+	p=malloc(sizeof(char)*100);
+	printf("请输入需要匹配的字符串： "); 
+	gets(p);
+	
+	int i;
+	for(i=0;i<strlen(p);i++){
+		if(p[i]=='{'||p[i]=='['||p[i]=='(') Push(S,p[i]);
+		if(p[i]=='}') {
+		char t=Pop(S);
+		if(t!='{') {
+			flag=0;
+			printf("匹配错误！！"); break; 
+		}
+		}
+		if(p[i]==']') {
+		char t=Pop(S);
+		if(t!='[') {
+			flag=0;
+			printf("匹配错误！！"); break; 
+		}
+		}
+		if(p[i]==')') {
+		char t=Pop(S);
+		if(t!='(') {
+			flag=0;
+			printf("匹配错误！！"); break; 
+		}
+		}
+	}
+	if(S->Top==-1&&flag==1)
+	  printf("匹配成功！"); 
+	return 0; 
+}

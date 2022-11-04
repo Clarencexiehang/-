@@ -1,0 +1,182 @@
+## 实验五
+
+实验五  二叉树
+
+【开发语言及实现平台或实验环境】
+Windows 操作系统， C开发环境。
+【实验目的】
+1、掌握二叉树的递归编程方法。
+2、掌握二叉排序树的查找、插入、删除操作。
+【实验内容】
+一、二叉树的链式声明
+1、二叉树/二叉排序树
+struct TreeNode { 
+    int Data;
+    struct TreeNode * Left;
+    struct TreeNode * Right;
+};
+
+二、实验内容
+1、编写程序，从键盘输入10个整数，逐个插入到二叉排序树中。根据你输入的整数序列，在草稿纸上画出该树。
+（1）分别用先序、中序、后序遍历该树并输出结果，检查结果是否正确。
+（2）输出该树的高度，检查结果是否正确。
+（3）输出结点总数，检查结果是否正确。
+（4）从树中删除一个整数，遍历该树并输出，检查结果是否正确。
+
+2、假设二叉树结点的数据为字符，即
+struct TreeNode { 
+    char Data;
+    struct TreeNode * Left;
+    struct TreeNode * Right;
+};
+如果对该二叉树遍历打印，并且以#代表空树，那么可以得到一个字符串，例如下面的二叉树：（注：设二叉树的结点数据不能为字符#）
+
+先序遍历结果为：ABC##DE##F###
+编写程序，输入一个类似于上面先序遍历结果的字符串，根据此字符串建立二叉树。（算法可参考教材126页）验证该二叉树是否正确。
+
+```C++
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+
+typedef struct TreeNode{
+	int Data;
+	TreeNode* Left;
+	TreeNode* Right;
+};
+
+void InsertTree(TreeNode*& T, int elem) {
+	if (T == NULL) {   			 
+		T = new TreeNode;
+		T->Data = elem;
+		T->Left = T->Right = NULL;
+	}
+	else {
+		if (T->Data == elem) return;
+		else if (elem < T->Data) InsertTree(T->Left, elem);
+		else if (elem > T->Data) InsertTree(T->Right, elem);
+	}
+}
+
+void CreateTree(TreeNode*& T) {
+	int InsertNum = 0;
+	cout << "Input the number that you want to insert: ";
+	cin >> InsertNum;
+	int ins, i;
+	for (i = 0; i < InsertNum; i++) {
+		cin >> ins;
+		InsertTree(T, ins);
+	}
+}
+
+void PreOrderTraverse(TreeNode* T) {
+	if (T) {
+		cout << T->Data << " ";
+		PreOrderTraverse(T->Left);
+		PreOrderTraverse(T->Right);
+	}
+}
+
+void InOrderTraverse(TreeNode* T) {
+	if (T) {
+		InOrderTraverse(T->Left);
+		cout << T->Data << " ";
+		InOrderTraverse(T->Right);
+	}
+}
+
+void PostOrderTraverse(TreeNode* T) {
+	if (T) {
+		PostOrderTraverse(T->Left);
+		PostOrderTraverse(T->Right);
+		cout << T->Data << " ";
+	}
+}
+
+int Height(TreeNode* T) {
+	int m, n; m = n = 0;
+	if (T == NULL) return 0;
+	else {
+		m = Height(T->Left);	//左子树高度 
+		n = Height(T->Right);	//右子树高度 
+		if (m > n) return m + 1;
+		else return n + 1;
+	}
+}
+
+int NodeNum(TreeNode* T) {
+	if (!T) return 0;
+	else return (NodeNum(T->Left) + NodeNum(T->Right) + 1);
+}
+
+TreeNode* FindFather(TreeNode *&T,int elem){
+	if (T == NULL) return NULL;
+	
+	if(((T->Left)&&(T->Left->Data==elem))||((T->Right)&&(T->Right->Data==elem))){
+		return T;
+	}
+	else{
+		TreeNode* q,*p;
+		q=FindFather(T->Left,elem);
+		p=FindFather(T->Right,elem);
+		return q?q:p;
+	}
+}
+
+void DeleteNode(TreeNode* &T, int elem,TreeNode *Head) {
+	if (T == NULL) return;
+
+	if (T->Data != elem) {  
+		DeleteNode(T->Left, elem,Head);
+		DeleteNode(T->Right, elem,Head);
+	}
+	else{
+		//若左右子树都存在 
+		if (T->Left&& T->Right) {
+			TreeNode* FindMin = T->Right;
+			while (FindMin->Left != NULL) {
+				FindMin = FindMin->Left;
+			}
+			T->Data = FindMin->Data;		//将右子树最小值赋给删除结点
+			TreeNode *Father=FindFather(T->Right,FindMin->Data);
+			//cout<<Father->Data; system("pause");
+			if(FindMin->Right!=NULL)	Father->Left=FindMin->Right; 	//若FindMin存在右子树，则将其连在父节点的左子树上  
+			else	Father->Left=NULL;	//否则父节点左孩子赋空 
+			free(FindMin);
+		}
+		//若左右子树都为空 
+		else if(T->Left==NULL&& T->Right==NULL){
+			TreeNode *Father=FindFather(Head,T->Data);
+			if(Father->Data>T->Data) Father->Left=NULL;//父节点子树赋空 
+			else Father->Right=NULL;
+			free(T);
+		}
+		//若左子树为空
+		else if (T->Left==NULL) {	
+			T->Data = T->Right->Data;
+			T->Right=NULL;
+			free(T->Right);
+		}
+		//若右子树为空
+		else if (!T->Right) {
+			T->Data = T->Left->Data;
+			T->Left=NULL;
+			free(T->Left);
+		}
+	}
+}
+
+
+int main() {
+	TreeNode* T = NULL;
+	CreateTree(T);
+	cout<<"先序遍历结果： ";PreOrderTraverse(T); cout<<endl;
+	cout <<"二叉树高度为： "<< Height(T) << endl;
+	cout << "二叉树节点个数为： "<<NodeNum(T) << endl;
+	TreeNode *Head=T;
+	
+	DeleteNode(T,25,Head);
+	cout<<"先序遍历结果： ";PreOrderTraverse(T); cout<<endl;
+	return 0;
+}
+```

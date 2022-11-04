@@ -1,0 +1,47 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+int Index(string str,string a){
+    int i=0,j=0,pos=0;
+    while(i<str.size()&&j<a.size()){
+    	cout<<str[i];
+        if(str[i]==a[j]){
+            pos=i+1;
+             int num=0;
+            for(j=1;j<a.size();j++){
+                if(str[1+i]==a[j]){
+					cout<<str[i+1];	}
+                if(str[++i]!=a[j]){
+                	cout<<str[i];
+                    j=0;
+                    i-=num;
+                    pos=0;
+                    break;
+                }
+                
+                num++;
+                if(j==a.size()-1){
+                    return pos;
+                }
+            }
+        }
+        else{
+            i++;	j=0;
+        }
+    }
+    return pos;
+}
+
+int main(){
+    string str[3],a[3];
+    for(int m=0;m<3;m++)
+        cin>>str[m]>>a[m];
+
+    for(int m=0;m<3;m++){
+        int position=Index(str[m],a[m]);
+
+		cout<<"\n"<<position<<endl; 
+    }
+    return 0;
+}

@@ -1,0 +1,56 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct test{
+	int data;
+	struct test* next;
+};
+
+struct test* init(){
+	struct test *head,*p,*q;
+	head=NULL;
+	p=q=(struct test*)malloc(sizeof(struct test));
+	int Size=1;
+	while(Size<5){
+		if(head==NULL) head=p;
+		else q->next=p;
+		scanf("%d",&p->data);
+		q=p;
+		p=(struct test*)malloc(sizeof(struct test));
+		Size++;
+	}
+	q->next=p;
+	p->next=NULL;
+	scanf("%d",&p->data);
+	return head;
+}
+
+//删除结点p的下一个节点 
+struct test* Delete(struct test *L,int j){ 
+	struct test *temp=L;int i;
+		for(i=0;i<j-2;i++){
+		temp=temp->next;
+	}
+	if(temp->next!=NULL){
+		temp->next=temp->next->next;
+		free(temp->next->next);
+	}
+	
+	return L;
+}
+
+void Display(struct test *L){
+	while(L){
+		printf("%d ",L->data);
+		L=L->next;
+	}
+}
+
+int main(){
+	struct test *L=(struct test*)malloc(sizeof(struct test));
+	L=init(); 	
+	struct test *L1=(struct test*)malloc(sizeof(struct test));
+	L1=Delete(L,4);
+	Display(L1);
+	return 0；
+}

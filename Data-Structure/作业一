@@ -1,0 +1,118 @@
+//实验一：随机生成100个整数存入一个顺序表，整数范围在[100，200)之间，输出表中所有元素；然后去掉其中所有的偶数，输出表中所有元素。
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+
+struct SqList{
+	int *Data;
+	int N;
+	int MaxSize;
+};
+
+void InitList(struct SqList *L,int num){
+	L->MaxSize=num;
+	L->N=L->MaxSize;
+	L->Data=(int *)malloc(sizeof(int)*num);
+	int i;
+	srand((int)time(NULL)); 
+	for(i=0;i<L->MaxSize;i++){
+		L->Data[i]=rand()%100+100;
+	}
+}
+
+void Display(struct SqList *L){
+	int i=0;
+	for(i;i<L->N;i++){
+		if(i%10==0) printf("\n"); 
+		printf("%d ",L->Data[i]);
+	}
+}
+void DeleteEven(struct SqList *L){
+	int i=0;int j;
+	for(i;i<L->N;i++){
+		if(L->Data[i]%2==0){
+			for(j=i;j<L->N;j++)
+				L->Data[j]=L->Data[j+1];
+			L->N--;
+			i--;
+		}
+	}
+}
+int main(){
+	struct SqList *p=(struct SqList *)malloc(sizeof(struct SqList ));
+	InitList(p,100);
+	Display(p);
+	printf("\n\n\n");
+	DeleteEven(p);
+	Display(p);
+	return 0;
+}
+
+//实验二：随机生成20个整数存入一个顺序表，整数范围在(1，200)之间，然后在第一个素数后插入1个0，第二个素数后插入2个0，以此类推，最后输出表中所有元素。
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+
+struct SqList{
+	int *Data;
+	int N;
+	int MaxSize;
+};
+
+int prime_num(int data){
+	int i=2; int flag=0;
+	if(data==1||data==2) flag=1;
+	while(i<data){
+		if(data%i==0) flag++;	
+		i++;
+	}
+	if(flag==0) return 1;
+	else return 0;
+}
+
+void InitList(struct SqList *L,int num){
+	L->MaxSize=num;
+	L->N=L->MaxSize;
+	L->Data=(int *)malloc(sizeof(int)*num);
+	int i;
+	srand((int)time(NULL)); 
+	for(i=0;i<L->MaxSize;i++){
+		L->Data[i]=rand()%199+1;
+	}
+}
+
+void Display(struct SqList *L){
+	int i=0;
+	for(i;i<L->N;i++){
+		if(i%10==0) printf("\n"); 
+		printf("%d ",L->Data[i]);
+	}
+}
+
+void Insert_zero(struct SqList *L,int num){
+	int i=0,j=0,k=0;int addnum=1; int judge;
+	for(i;i<L->N;i++){
+		judge=prime_num(L->Data[i]);
+		if(judge==1){
+			L->Data=(int *)realloc(L->Data,sizeof(int)*(num+addnum)); // Allocate new space
+			num+=addnum;
+			for(k=1;k<=addnum;k++){
+				for(j=L->N-1;j>i;j--){
+				L->Data[j+1]=L->Data[j];
+				}
+				L->Data[i+k]=0;
+				L->N++; 
+			}
+			i+=addnum;addnum++;
+		} 		
+	}
+}
+
+
+int main(){
+	struct SqList *p=(struct SqList *)malloc(sizeof(struct SqList ));
+	InitList(p,20);
+	Insert_zero(p,20);
+	Display(p);
+	return 0;
+}

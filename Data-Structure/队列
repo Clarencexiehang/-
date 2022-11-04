@@ -1,0 +1,46 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#define MaxSize 5
+
+typedef struct{
+	int *base;
+	int front;
+	int rear;
+}SqQuene; 
+
+int rand_num(){
+	int temp=rand()%100;
+	return temp;
+}
+
+void InitQuene(SqQuene *L){
+	L->base=(int *)malloc(sizeof(SqQuene));
+	L->front=L->rear=0;
+}
+
+void EnQuene(SqQuene *L){
+	int i=0;
+	while(i<MaxSize-1){
+		//if(((L->rear)+1)%MaxSize==L->front) printf("ERROR\n");
+		L->base[L->rear]=rand_num();
+		L->rear=(L->rear+1)%MaxSize;
+		i++;
+	}
+}
+
+void Display(SqQuene *L){
+	while(L->front!=L->rear){
+		printf("%d ",L->base[L->front++]);
+	}
+}
+
+int main(){
+	srand((int)time(NULL));
+	SqQuene *p;
+	p=(int *)malloc(sizeof(SqQuene));
+	InitQuene(p);
+	EnQuene(p);
+	Display(p);
+	return 0;
+} 

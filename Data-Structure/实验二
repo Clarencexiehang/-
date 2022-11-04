@@ -1,0 +1,274 @@
+//4题
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+
+struct Node{
+	int Data;
+	struct Node *next;
+};
+
+/*struct DNode{
+	int Data;
+	struct DNode *next;
+	struct DNode *previous;
+}*/
+int LengthList(struct Node *ptr){
+	struct Node *l;
+	l=ptr;
+	int len=0;
+	while(l->next){
+		len++;
+		l=l->next;
+	} 
+	return len;
+}
+
+struct Node *CreateList(struct Node *l,int size){
+	struct Node *p,*q,*head;
+	head=(struct Node*)malloc(sizeof(struct Node));
+	head->next=NULL;
+	p=q=(struct Node*)malloc(sizeof(struct Node));
+	int i=0;
+	for(i;i<size;i++){
+		if(head->next==NULL) head->next=p;
+		else q->next=p;
+		p->Data=rand()%100+1;
+		q=p;
+		p=(struct Node*)malloc(sizeof(struct Node));
+	}
+	q->next=NULL;
+	return head;
+}
+
+struct Node *SortList(struct Node *p,int size){
+	int i,j;int temp=0;
+	struct Node *l;
+
+	for(i=0;i<size-1;i++){
+		l=p->next;
+		for(j=0;j<size-1-i;j++){
+			if((l->Data)>(l->next->Data)){
+			    temp=l->Data;
+				l->Data=l->next->Data;
+				l->next->Data=temp;
+			}
+			l=l->next;
+		}
+	}
+	return p;
+}
+
+struct Node *MergeList(struct Node *p,struct Node *q){
+	int i=0;
+	struct Node *l; 	l=p;
+	while(l->next){
+		l=l->next; 
+	}
+	l->next=q->next; 
+	p=SortList(p,LengthList(p));
+	//delete same number
+	l=p->next;
+	while(l->next){
+		if(l->Data==l->next->Data){
+			struct Node *temp=l->next;
+			l->next=l->next->next;
+			free(temp); 
+		}
+		l=l->next;
+	}
+	return p;
+}
+
+void Display(struct Node *p){
+	struct Node *l;
+	l=(struct Node*)malloc(sizeof(struct Node));
+	l=p->next; 
+	if(l==NULL) printf("ERROR");
+	else{
+		int n=0;
+		while(l!=NULL){
+			if(n%20==0) printf("\n"); 
+			printf("%d ",l->Data); 
+			l=l->next; n++;
+		}
+	}
+}
+
+int main(){
+	srand((int)time(NULL)); 
+	struct Node *p,*q;
+	p=CreateList(p,10); q=CreateList(q,10);
+	p=SortList(p,10); q=SortList(q,10);
+	Display(p);   Display(q);
+	MergeList(p,q);
+	printf("\n\n\n合并后："); 
+	Display(p);
+	return 0;
+}
+
+//5
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+
+struct Node{
+	int Data;
+	struct Node *next;
+};
+
+int LengthList(struct Node *ptr){
+	struct Node *l;
+	l=ptr;
+	int len=0;
+	while(l->next){
+		len++;
+		l=l->next;
+	} 
+	return len;
+}
+
+struct Node * CreateList(){
+	struct Node *head=(struct Node*)malloc(sizeof(struct Node));
+	head->next=NULL;
+	return head;
+}
+
+struct Node *InitList(struct Node *head,int size){
+	struct Node *p,*q;
+	p=q=(struct Node*)malloc(sizeof(struct Node));
+	int i=0;
+	for(i;i<size;i++){
+		if(head->next==NULL) head->next=p;
+		else q->next=p;
+		p->Data=-(rand()%201)+100; 
+		q=p;
+		p=(struct Node*)malloc(sizeof(struct Node));
+	}
+	q->next=NULL;
+	return head;
+}
+
+void Display(struct Node *p){
+	struct Node *l;
+	l=p->next; 
+	if(l==NULL) printf("ERROR");
+	else{
+		int n=0;
+		while(l){
+			if(n%10==0) printf("\n"); 
+			printf("%d  ",l->Data); 
+			l=l->next; n++;
+		}
+	}
+}
+
+void SeparateList(struct Node *Origin,struct Node *PosInt,struct Node *NegInt){
+	struct Node *l=Origin->next;
+	struct Node *p,*q;
+	p=q=(struct Node*)malloc(sizeof(struct Node));
+	struct Node *a,*b;
+	a=b=(struct Node*)malloc(sizeof(struct Node));
+	while(l){
+		if(l->Data>=0){
+			if(PosInt->next==NULL) PosInt->next=p;
+			else q->next=p;
+			p->Data=l->Data;
+			q=p;
+			p=(struct Node*)malloc(sizeof(struct Node));
+			q->next=NULL;
+		}
+		else{		
+			if(NegInt->next==NULL) NegInt->next=a;
+			else b->next=a;
+			a->Data=l->Data;
+			b=a;
+			a=(struct Node*)malloc(sizeof(struct Node));
+			b->next=NULL;
+		}
+		l=l->next;
+	}
+}
+
+int main(){
+	srand((int)time(NULL)); 
+	struct Node *p;
+	p=CreateList();
+        p=InitList(p,100);
+	printf("新建链表为：\n");
+	Display(p);
+	struct Node *PosInt,*NegInt;
+	PosInt=CreateList(); NegInt=CreateList();
+	SeparateList(p,PosInt,NegInt);
+	printf("\n\n非负数链表："); 
+	Display(PosInt);
+	printf("\n\n负数链表："); 
+	Display(NegInt);
+	return 0;
+}
+
+//6
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+
+struct Node {
+	int Data;   
+	struct DNode * next;
+	struct DNode * previous;
+};
+
+struct Node * CreateList(){
+	struct Node *head=(struct Node*)malloc(sizeof(struct Node));
+	head->next=NULL; head->previous=NULL;
+	return head;
+}
+
+struct Node *InitList(struct Node *head,int size){
+	struct Node *p,*q;
+	p=q=(struct Node*)malloc(sizeof(struct Node));
+	int i=0;
+	for(i;i<size;i++){
+		if(head->next==NULL){head->next=p; p->previous=head;} 
+		else{ q->next=p; p->previous=q;	}
+		
+		p->Data=rand()%100+1; 
+		q=p;
+		p=(struct Node*)malloc(sizeof(struct Node));
+	}
+	q->next=head;
+	head->previous=q;
+	return head;
+}
+
+void OrderDisplay(struct Node *p){
+	struct Node *l;
+	l=p->next; 
+	int n=0;
+	while(l!=p){
+		if(n%10==0) printf("\n"); 
+		printf("%d  ",l->Data); 
+		l=l->next; n++;		
+	}
+}
+
+void ReorderDisplay(struct Node *p){
+	struct Node *l;
+	l=p->previous; 
+	int n=0;
+	while(l!=p){
+		if(n%10==0) printf("\n"); 
+		printf("%d  ",l->Data); 
+		l=l->previous; n++;		
+	}
+}
+
+int main(){
+	srand((int)time(NULL)); 
+	struct Node *p;
+	p=CreateList();
+    	p=InitList(p,10);
+	OrderDisplay(p);
+ 	ReorderDisplay(p);
+	return 0;
+}

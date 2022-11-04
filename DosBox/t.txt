@@ -1,0 +1,31 @@
+assume cs:code
+data segment
+    db 8,11,8,1,8,5,63,38,8,8
+data ends
+
+code segment
+
+start:  mov ax,data
+        mov ds,ax
+        mov ax,0    
+        mov bx,0
+        mov cx,10
+  s:
+        cmp byte ptr [bx],8
+        je ok
+        jmp short notOk
+ok:     inc ax
+notOK:  inc bx
+        loop s
+
+        add ax,30h
+        mov dx,ax
+        mov ah,02h
+        int 21h
+        
+        mov ax,4c00h
+        int 21h
+
+
+code ends
+end start

@@ -1,0 +1,162 @@
+#include <iostream>
+#include<cstdlib>
+using namespace std;
+
+typedef struct Edge{
+    int weight;
+    int tailNode;   //边的末顶点
+    struct Edge *next;
+}Edge;
+
+typedef struct Vertex{
+    Edge *nextEdge;
+    int InDegree;   //入度
+    int OutDegree;  //出度
+    int ve;
+}Vertex;
+
+typedef struct DirectedGraph{
+    Vertex *Vex;
+    int VexNum;     //顶点个数
+    int EdgeNum;    //边个数
+}DirectedGraph;
+
+typedef struct{
+    int *Data;
+    int Top;
+    int MaxSize;
+}Stack;
+
+//函数声明
+int Max(int a,int b);
+DirectedGraph *CreateDirectedGraph(DirectedGraph *g);
+int IfAOE(DirectedGraph *g);
+void InitStack(Stack *l,int maxsize);
+int Pop(Stack *l);
+void Push(Stack *l,int e);
+
+DirectedGraph *CreateDirectedGraph(DirectedGraph *g){
+    int vexnum,edgenum;
+    //cout<<"输入顶点个数与边的个数： ";
+    cin>>vexnum;cin>>edgenum;
+    g->VexNum=vexnum;   g->EdgeNum=edgenum;
+    g->Vex=new Vertex [g->VexNum];
+    for(int i=0;i<g->VexNum;i++){
+        g->Vex[i].InDegree=0;
+        g->Vex[i].OutDegree=0;
+        g->Vex[i].ve=0;
+        g->Vex[i].nextEdge=NULL;
+    }
+    for(int k=0;k<g->EdgeNum;k++){
+        int i,j,w;
+        cin>>i; cin>>j; cin>>w;
+        g->Vex[i].OutDegree++;
+        g->Vex[j].InDegree++;
+
+        Edge *em=new Edge;   //分配一个结点存储数据
+        em->weight=w;
+        em->tailNode=j;
+        if(g->Vex[i].nextEdge==NULL){
+            g->Vex[i].nextEdge=em;
+            em->next=NULL;
+        }
+        else{
+            em->next=g->Vex[i].nextEdge;
+            g->Vex[i].nextEdge=em;
+        }
+    }
+    return g;
+}
+
+int Max(int a,int b){
+    return a>b?a:b;
+}
+
+void VertexEarliest(DirectedGraph *g){
+	int i;
+	for(i=0;i<g->VexNum;i++){
+		Edge *move=g->Vex[i].nextEdge;
+		while(move!=NULL){
+			g->Vex[move->tailNode].ve=Max(move->weight+g->Vex[i].ve,g->Vex[move->tailNode].ve);
+			move=move->next;
+		}	
+	}
+}
+
+int KeyRoute(DirectedGraph *g){
+	for(int i=0;i<g->VexNum;i++){
+		if(g->Vex[i].OutDegree==0)
+			return g->Vex[i].ve;
+	}
+	return 0;
+}
+
+int IfAOE(DirectedGraph *g){
+	//若有多颗树 
+   	int OriginalPointNUM=0,MeetingPointNUM=0;
+	for(int i=0;i<g->VexNum;i++){
+		if(g->Vex[i].InDegree==0)	OriginalPointNUM++;
+		if(g->Vex[i].OutDegree==0)	MeetingPointNUM++;	
+	}
+	if(OriginalPointNUM>1||MeetingPointNUM>1)	return 0;
+	
+    //若有回路
+    int indegree[g->VexNum];    int i;
+    for(i=0;i<g->VexNum;i++)
+        indegree[i]=g->Vex[i].InDegree;         //给入度数组赋值
+    int topo[g->VexNum];    //定义一个拓扑序列数组，存放入度为0的结点
+    Stack *S=(Stack*)malloc(sizeof(Stack));
+    InitStack(S,g->VexNum);
+
+    for(i=0;i<g->VexNum;i++){
+        if(!indegree[i])  Push(S,i);   //入度为0者进栈
+    }
+    int num=0;      //对输出顶点计数，初始为0
+
+    while(S->Top!=-1){
+        topo[num]=Pop(S);
+        Edge *p=g->Vex[topo[num]].nextEdge;
+        while (p!=NULL){
+            indegree[p->tailNode]--;
+            if(indegree[p->tailNode]==0) Push(S,p->tailNode);
+            p=p->next;
+        }
+        num++;
+    }
+    if(num<g->VexNum){
+         return 0;
+    }
+    //若是AOE网,"最早发生时间为："
+    VertexEarliest(g);
+    return KeyRoute(g);  
+}
+
+void InitStack(Stack *l,int maxsize){
+    l->MaxSize=maxsize;
+    l->Data=(int *)malloc(l->MaxSize*sizeof(int));
+    l->Top=-1;
+}
+
+void Push(Stack *l,int e){
+    if(l->Top==l->MaxSize) 	return;
+    l->Top++;
+    *l->Data=e; l->Data++;
+}
+
+int Pop(Stack *l){ 
+    int a;
+    if(l->Top==-1) return 0;
+    int temp=*(--l->Data);
+    l->Top--;
+    return temp;
+}
+
+
+int main(){
+    DirectedGraph *g=new DirectedGraph;
+    g=CreateDirectedGraph(g);
+    int a=IfAOE(g);
+    if(a==0)	cout<<"false"<<endl;		//如果不为AOE网，输出false 
+	else    cout<<a<<endl;
+    return 0;
+}
