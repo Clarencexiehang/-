@@ -1,0 +1,6 @@
+[submodule "51单片机/51MCU-electronic-coded-lock"]
+	path = 51单片机/51MCU-electronic-coded-lock
+	url = git@gitee.com:ClarenceXH/51MCU-electronic-coded-lock.git
+[submodule "51单片机/课程设计"]
+	path = 51单片机/课程设计
+	url = git@gitee.com:ClarenceXH/51MCU-electronic-coded-lock.git
