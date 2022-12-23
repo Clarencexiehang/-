@@ -3,4 +3,7 @@ project(OS)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(OS "Experiment 2    page-replacement-algorithm/page_replacement.cpp")
+
+add_executable(os
+        E3_FileSystem/FileSystem.cpp
+        )
