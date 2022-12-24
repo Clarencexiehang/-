@@ -6,4 +6,5 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(os
         E3_FileSystem/FileSystem.cpp
+        E3_FileSystem/saf.cpp
         )

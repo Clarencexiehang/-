@@ -85,6 +85,9 @@
 		<Unit filename="D:/lecture_code/OS/E3_FileSystem/FileSystem.cpp">
 			<Option target="os"/>
 		</Unit>
+		<Unit filename="D:/lecture_code/OS/E3_FileSystem/saf.cpp">
+			<Option target="os"/>
+		</Unit>
 		<Unit filename="D:/lecture_code/OS/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

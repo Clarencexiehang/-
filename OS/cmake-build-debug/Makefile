@@ -152,6 +152,30 @@ E3_FileSystem/FileSystem.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\os.dir\build.make CMakeFiles/os.dir/E3_FileSystem/FileSystem.cpp.s
 .PHONY : E3_FileSystem/FileSystem.cpp.s
 
+E3_FileSystem/saf.obj: E3_FileSystem/saf.cpp.obj
+.PHONY : E3_FileSystem/saf.obj
+
+# target to build an object file
+E3_FileSystem/saf.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\os.dir\build.make CMakeFiles/os.dir/E3_FileSystem/saf.cpp.obj
+.PHONY : E3_FileSystem/saf.cpp.obj
+
+E3_FileSystem/saf.i: E3_FileSystem/saf.cpp.i
+.PHONY : E3_FileSystem/saf.i
+
+# target to preprocess a source file
+E3_FileSystem/saf.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\os.dir\build.make CMakeFiles/os.dir/E3_FileSystem/saf.cpp.i
+.PHONY : E3_FileSystem/saf.cpp.i
+
+E3_FileSystem/saf.s: E3_FileSystem/saf.cpp.s
+.PHONY : E3_FileSystem/saf.s
+
+# target to generate assembly for a file
+E3_FileSystem/saf.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\os.dir\build.make CMakeFiles/os.dir/E3_FileSystem/saf.cpp.s
+.PHONY : E3_FileSystem/saf.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -164,6 +188,9 @@ help:
 	@echo ... E3_FileSystem/FileSystem.obj
 	@echo ... E3_FileSystem/FileSystem.i
 	@echo ... E3_FileSystem/FileSystem.s
+	@echo ... E3_FileSystem/saf.obj
+	@echo ... E3_FileSystem/saf.i
+	@echo ... E3_FileSystem/saf.s
 .PHONY : help
 
 
