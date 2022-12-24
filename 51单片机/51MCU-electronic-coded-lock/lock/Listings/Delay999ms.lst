@@ -1,0 +1,46 @@
+C51 COMPILER V9.60.0.0   DELAY999MS                                                        11/30/2022 11:23:59 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DELAY999MS
+OBJECT MODULE PLACED IN .\Objects\Delay999ms.obj
+COMPILER INVOKED BY: D:\Download\keil\C51\BIN\C51.EXE Delay999ms.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\L
+                    -istings\Delay999ms.lst) OBJECT(.\Objects\Delay999ms.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include<INTRINS.h>
+   3          
+   4          
+   5          void Delay999ms()               //@11.0592MHz
+   6          {
+   7   1              unsigned char i, j, k;
+   8   1      
+   9   1              _nop_();
+  10   1              _nop_();
+  11   1              _nop_();
+  12   1              i = 42;
+  13   1              j = 252;
+  14   1              k = 9;
+  15   1              do
+  16   1              {
+  17   2                      do
+  18   2                      {
+  19   3                              while (--k);
+  20   3                      } while (--j);
+  21   2              } while (--i);
+  22   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     16    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

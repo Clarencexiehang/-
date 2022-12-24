@@ -1,0 +1,66 @@
+C51 COMPILER V9.60.0.0   MATRIXKEY                                                         12/01/2022 20:26:35 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MATRIXKEY
+OBJECT MODULE PLACED IN .\Objects\matrixKey.obj
+COMPILER INVOKED BY: D:\Download\keil\C51\BIN\C51.EXE matrixKey.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\matrixKey.lst) OBJECT(.\Objects\matrixKey.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Delay1ms.h"
+   3          #define key P1
+   4          
+   5          
+   6          /**
+   7           * @brief 先行扫描，再列扫描
+   8           */
+   9          unsigned char MatrixKey(){
+  10   1              unsigned char keyValue[16] = {1,2,3,'A',
+  11   1                                                                        4,5,6,'B',
+  12   1                                                                        7,8,9,'C',
+  13   1                                                                      '*',0,'#','D'};
+  14   1          unsigned char num = 100;
+  15   1          key = 0xF0;
+  16   1          if(key != 0xF0){
+  17   2              Delay1ms(10);   //延时抖消
+  18   2              if(key != 0xF0){    //check again
+  19   3                              key = 0xF0;
+  20   3                  switch(key)   //先确定行
+  21   3                   {
+  22   4                      case 0x70: num=1;  break;   //第一行
+  23   4                      case 0xb0: num=5;  break;   //第二行
+  24   4                      case 0xd0: num=9;  break;   //第三行
+  25   4                      case 0xe0: num=13; break;   //第四行
+  26   4                   }
+  27   3                   key = 0x0F;     //对应IO口拉高，以便检测
+  28   3                   switch(key)   //再确定列
+  29   3                   {
+  30   4                      case 0x07: num=num+0;while(key != 0x0F){}; break;   //第一列
+  31   4                      case 0x0b: num=num+1;while(key != 0x0F){}; break;   //第二列
+  32   4                      case 0x0d: num=num+2;while(key != 0x0F){}; break;   //第三列
+  33   4                      case 0x0e: num=num+3;while(key != 0x0F){}; break;   //第四列
+  34   4                   }
+  35   3              }
+  36   2          }
+  37   1          
+  38   1              if(num == 100)
+  39   1                      return 100;
+  40   1              else
+  41   1                      return keyValue[num-1];
+  42   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    168    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      17
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

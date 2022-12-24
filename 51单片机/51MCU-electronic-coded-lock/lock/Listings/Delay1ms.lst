@@ -1,0 +1,47 @@
+C51 COMPILER V9.60.0.0   DELAY1MS                                                          11/30/2022 11:23:57 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DELAY1MS
+OBJECT MODULE PLACED IN .\Objects\Delay1ms.obj
+COMPILER INVOKED BY: D:\Download\keil\C51\BIN\C51.EXE Delay1ms.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
+                    -tings\Delay1ms.lst) OBJECT(.\Objects\Delay1ms.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include<INTRINS.h>
+   3          
+   4          
+   5          
+   6          void Delay1ms(char time)                //@11.0592MHz
+   7          {
+   8   1              char t;
+   9   1              for(t=0;t<time;t++){
+  10   2              unsigned char i, j;
+  11   2      
+  12   2              _nop_();
+  13   2              _nop_();
+  14   2              _nop_();
+  15   2              i = 11;
+  16   2              j = 190;
+  17   2              do
+  18   2              {
+  19   3                      while (--j);
+  20   3              } while (--i);
+  21   2              }
+  22   1              
+  23   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     32    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
